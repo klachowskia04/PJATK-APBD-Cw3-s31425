@@ -1,4 +1,5 @@
 using System.ComponentModel.Design;
+using System.Data;
 using LinqConsoleLab.PL.Data;
 
 namespace LinqConsoleLab.PL.Exercises;
@@ -256,7 +257,12 @@ public sealed class ZadaniaLinq
     /// </summary>
     public IEnumerable<string> Zadanie14_SredniaOcenaNaPrzedmiot()
     {
-        throw Niezaimplementowano(nameof(Zadanie14_SredniaOcenaNaPrzedmiot));
+        return from z in DaneUczelni.Zapisy
+            where z.OcenaKoncowa != null
+            join p in DaneUczelni.Przedmioty on z.PrzedmiotId equals p.Id
+            group z by p.Nazwa
+            into g
+            select $"{g.Key} | {g.Average(z => z.OcenaKoncowa)}";
     }
 
     /// <summary>
